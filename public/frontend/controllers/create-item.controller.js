@@ -51,6 +51,10 @@
             vm.successMessage = '';
             vm.errorMessage = '';
 
+            if (vm.createdItemId) {
+                vm.form.id_item = vm.createdItemId;
+            }
+
             ApiService.post('/api/items', vm.form).then(function (response) {
                 vm.submitting = false;
                 var data = response.data && response.data.data;

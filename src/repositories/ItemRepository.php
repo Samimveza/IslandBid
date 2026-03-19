@@ -293,5 +293,103 @@ class ItemRepository
             throw $e;
         }
     }
+
+    public function updateItemWithFields(string $idItem, array $itemData, array $fieldValues): array
+    {
+        $this->db->beginTransaction();
+        try {
+            $sql = '
+                update item set
+                    id_category = :id_category,
+                    title = :title,
+                    short_description = :short_description,
+                    description = :description,
+                    listing_type = :listing_type,
+                    item_status = :item_status,
+                    start_price = :start_price,
+                    fixed_price = :fixed_price,
+                    bid_start_utc = :bid_start_utc,
+                    bid_end_utc = :bid_end_utc,
+                    currency_code = :currency_code,
+                    location_text = :location_text,
+                    meta_title = :meta_title,
+                    meta_description = :meta_description,
+                    is_published = :is_published,
+                    is_active = :is_active,
+                    date_updated_utc = now()
+                where id_item = :id_item
+                  and id_user = :id_user
+            ';
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([
+                'id_item' => $idItem,
+                'id_user' => $itemData['id_user'],
+                'id_category' => $itemData['id_category'],
+                'title' => $itemData['title'],
+                'short_description' => $itemData['short_description'],
+                'description' => $itemData['description'],
+                'listing_type' => $itemData['listing_type'],
+                'item_status' => $itemData['item_status'],
+                'start_price' => $itemData['start_price'],
+                'fixed_price' => $itemData['fixed_price'],
+                'bid_start_utc' => $itemData['bid_start_utc'],
+                'bid_end_utc' => $itemData['bid_end_utc'],
+                'currency_code' => $itemData['currency_code'],
+                'location_text' => $itemData['location_text'],
+                'meta_title' => $itemData['meta_title'],
+                'meta_description' => $itemData['meta_description'],
+                'is_published' => $itemData['is_published'],
+                'is_active' => $itemData['is_active'],
+            ]);
+
+            $del = $this->db->prepare('delete from item_field_value where id_item = :id_item');
+            $del->execute(['id_item' => $idItem]);
+
+            foreach ($fieldValues as $fv) {
+                $idItemFieldValue = Util::uuid();
+                $stmtFv = $this->db->prepare('
+                    insert into item_field_value (
+                        id_item_field_value,
+                        id_item,
+                        id_category_field,
+                        field_value_text,
+                        field_value_number,
+                        field_value_boolean,
+                        field_value_date,
+                        field_value_option
+                    ) values (
+                        :id_item_field_value,
+                        :id_item,
+                        :id_category_field,
+                        :field_value_text,
+                        :field_value_number,
+                        :field_value_boolean,
+                        :field_value_date,
+                        :field_value_option
+                    )
+                ');
+                $stmtFv->execute([
+                    'id_item_field_value' => $idItemFieldValue,
+                    'id_item' => $idItem,
+                    'id_category_field' => $fv['id_category_field'],
+                    'field_value_text' => $fv['field_value_text'],
+                    'field_value_number' => $fv['field_value_number'],
+                    'field_value_boolean' => $fv['field_value_boolean'],
+                    'field_value_date' => $fv['field_value_date'],
+                    'field_value_option' => $fv['field_value_option'],
+                ]);
+            }
+
+            $this->db->commit();
+
+            return [
+                'id_item' => $idItem,
+                'seo_slug' => $itemData['seo_slug'],
+            ];
+        } catch (Throwable $e) {
+       	    $this->db->rollBack();
+            throw $e;
+        }
+    }
 }
 

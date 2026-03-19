@@ -16,7 +16,13 @@ if ($idCategory === '') {
 
 $categoryFields = $categoryRepo->getActiveFieldsWithOptions($idCategory);
 
-$result = $itemService->createItem($user, $payload, $categoryFields);
+$idItem = isset($payload['id_item']) ? (string) $payload['id_item'] : '';
+
+if ($idItem !== '') {
+    $result = $itemService->updateItem($idItem, $user, $payload, $categoryFields);
+} else {
+    $result = $itemService->createItem($user, $payload, $categoryFields);
+}
 
 JsonResponse::success([
     'item' => $result,
