@@ -23,6 +23,11 @@ require_once __DIR__ . '/../services/CategoryService.php';
 require_once __DIR__ . '/../repositories/ParameterRepository.php';
 require_once __DIR__ . '/../repositories/DocumentTypeRepository.php';
 require_once __DIR__ . '/../repositories/DocumentRepository.php';
+require_once __DIR__ . '/../repositories/BidRepository.php';
+require_once __DIR__ . '/../services/BidService.php';
+require_once __DIR__ . '/../repositories/SavedItemRepository.php';
+require_once __DIR__ . '/../repositories/SellerDashboardRepository.php';
+require_once __DIR__ . '/../repositories/BuyerDashboardRepository.php';
 
 Cors::apply();
 Cors::handlePreflight(Request::method());

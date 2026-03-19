@@ -12,6 +12,12 @@ RewriteRule ^login$ login.php [QSA,L]
 # Pretty URL for create item page
 RewriteRule ^create-item$ create-item.php [QSA,L]
 
+# Pretty URL for seller dashboard
+RewriteRule ^seller-dashboard$ seller-dashboard.php [QSA,L]
+
+# Pretty URL for buyer dashboard
+RewriteRule ^buyer-dashboard$ buyer-dashboard.php [QSA,L]
+
 # SEO-friendly item details page
 RewriteRule ^item/([^/]+)$ item.php?seo_slug=$1 [QSA,L]
 

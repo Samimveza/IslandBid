@@ -132,6 +132,7 @@ class ItemRepository
         $sql = "
             select
                 b.id_bid,
+                b.id_user,
                 b.bid_amount,
                 b.bid_status,
                 b.bid_time_utc,
@@ -155,6 +156,24 @@ class ItemRepository
             from item
             where id_item = :id_item
               and id_user = :id_user
+        ');
+        $stmt->execute([
+            'id_item' => $idItem,
+            'id_user' => $idUser,
+        ]);
+        $row = $stmt->fetch();
+        return $row ?: null;
+    }
+
+    public function getOwnedItemForEdit(string $idItem, string $idUser): ?array
+    {
+        $stmt = $this->db->prepare('
+            select
+                i.*
+            from item i
+            where i.id_item = :id_item
+              and i.id_user = :id_user
+            limit 1
         ');
         $stmt->execute([
             'id_item' => $idItem,

@@ -30,7 +30,7 @@ if (!$currentUser) {
 
     <main class="container create-layout">
         <div class="create-card">
-            <h2>Create a new listing</h2>
+            <h2>{{ vm.createdItemId ? 'Edit listing' : 'Create a new listing' }}</h2>
 
             <form novalidate ng-submit="vm.submit()">
                 <div class="form-row">
@@ -160,19 +160,24 @@ if (!$currentUser) {
             <section class="upload-section" ng-if="vm.createdItemId">
                 <h3>Images</h3>
                 <div class="upload-row">
-                    <input type="file" file-input="vm.uploadFile">
+                    <input type="file" file-input="vm.uploadFile" preview-model="vm.uploadPreviewUrl">
                     <input type="number" min="0" placeholder="Display order" ng-model="vm.uploadDisplayOrder">
                     <label>
                         <input type="checkbox" ng-model="vm.uploadIsPrimary"> Primary
                     </label>
-                    <button type="button" class="btn-filter" ng-click="vm.uploadImage()">Upload</button>
+                    <button type="button" class="btn-filter" ng-disabled="vm.uploadingImage || !vm.uploadFile" ng-click="vm.uploadImage()">
+                        {{ vm.uploadingImage ? 'Uploading...' : 'Upload' }}
+                    </button>
+                </div>
+                <div class="upload-preview" ng-if="vm.uploadPreviewUrl">
+                    <img ng-src="{{ vm.uploadPreviewUrl }}" alt="Preview image">
                 </div>
                 <div class="upload-error" ng-if="vm.uploadError">
                     {{ vm.uploadError }}
                 </div>
                 <div class="image-list" ng-if="vm.images.length">
                     <div class="image-thumb" ng-repeat="img in vm.images track by img.id_item_document">
-                        <img ng-src="{{ img.full_server_url }}" alt="{{ img.file_name }}">
+                        <img ng-src="{{ img.server_file_path }}" alt="{{ img.file_name }}">
                         <div class="meta">
                             <span class="name">{{ img.file_name }}</span>
                             <span class="badge" ng-if="img.is_primary">Primary</span>
@@ -185,7 +190,10 @@ if (!$currentUser) {
     </main>
 
     <script>
-        window.__APP_BOOTSTRAP__ = { user: <?php echo json_encode($currentUser); ?> };
+        window.__APP_BOOTSTRAP__ = {
+            user: <?php echo json_encode($currentUser); ?>,
+            edit_item_id: <?php echo json_encode(isset($_GET['id_item']) ? (string) $_GET['id_item'] : null); ?>
+        };
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
     <script src="/frontend/app.js"></script>

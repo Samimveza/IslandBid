@@ -92,6 +92,11 @@ $canonical = $baseUrl . '/item/' . urlencode($item['seo_slug']);
                         echo htmlspecialchars(ucwords(str_replace('_', ' ', $item['listing_type'])), ENT_QUOTES, 'UTF-8');
                         ?>
                     </span>
+                    <button type="button"
+                            class="save-pill save-pill--inline"
+                            ng-click="vm.toggleSaved()">
+                        {{ vm.isSaved ? 'Saved' : 'Save' }}
+                    </button>
                 </div>
             </header>
 
@@ -157,9 +162,26 @@ $canonical = $baseUrl . '/item/' . urlencode($item['seo_slug']);
                         <?php endif; ?>
 
                         <?php if ($currentUser): ?>
-                            <button type="button" class="btn-primary full-width" ng-click="vm.openBidModal()">
-                                Place bid
-                            </button>
+                            <div class="bid-box">
+                                <div class="bid-current">
+                                    Current highest: <strong>{{ vm.currentHighestBid | currency:'MUR ':0 }}</strong>
+                                </div>
+                                <div class="bid-form" ng-if="vm.canBid">
+                                    <input type="number" min="0" step="1" placeholder="Enter your bid" ng-model="vm.bidAmount">
+                                    <button type="button" class="btn-primary full-width" ng-if="!vm.myActiveBid" ng-disabled="vm.bidSubmitting" ng-click="vm.placeBid()">
+                                        {{ vm.bidSubmitting ? 'Placing bid...' : 'Place bid' }}
+                                    </button>
+                                    <button type="button" class="btn-primary full-width" ng-if="vm.myActiveBid" ng-disabled="vm.bidSubmitting" ng-click="vm.updateBid()">
+                                        {{ vm.bidSubmitting ? 'Updating bid...' : 'Update my bid' }}
+                                    </button>
+                                    <button type="button" class="btn-secondary full-width" ng-if="vm.myActiveBid" ng-disabled="vm.bidSubmitting" ng-click="vm.removeBid()">
+                                        Remove my bid
+                                    </button>
+                                </div>
+                                <p class="login-prompt" ng-if="!vm.canBid">You cannot bid on this item.</p>
+                                <p class="bid-success" ng-if="vm.bidSuccess">{{ vm.bidSuccess }}</p>
+                                <p class="bid-error" ng-if="vm.bidError">{{ vm.bidError }}</p>
+                            </div>
                         <?php else: ?>
                             <p class="login-prompt">
                                 <a href="/login">Login</a> or <a href="/register">create an account</a> to place a bid.
@@ -169,21 +191,16 @@ $canonical = $baseUrl . '/item/' . urlencode($item['seo_slug']);
 
                     <section class="bids-panel">
                         <h2>Recent bids</h2>
-                        <?php if ($bids): ?>
-                            <ul class="bids-list">
-                                <?php foreach ($bids as $bid): ?>
-                                    <li>
-                                        <span class="bidder">
-                                            <?php echo htmlspecialchars($bid['first_name'] . ' ' . strtoupper(substr($bid['last_name'], 0, 1)) . '.', ENT_QUOTES, 'UTF-8'); ?>
-                                        </span>
-                                        <span class="amount">MUR <?php echo number_format((float) $bid['bid_amount'], 0); ?></span>
-                                        <span class="time"><?php echo htmlspecialchars($bid['bid_time_utc'], ENT_QUOTES, 'UTF-8'); ?></span>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        <?php else: ?>
-                            <p class="no-bids">No bids yet.</p>
-                        <?php endif; ?>
+                        <ul class="bids-list" ng-if="vm.bids.length">
+                            <li ng-repeat="b in vm.bids">
+                                <span class="bidder">
+                                    {{ b.first_name }} {{ (b.last_name | limitTo:1) | uppercase }}.
+                                </span>
+                                <span class="amount">MUR {{ b.bid_amount | number:0 }}</span>
+                                <span class="time">{{ b.bid_time_utc | date:'medium' }}</span>
+                            </li>
+                        </ul>
+                        <p class="no-bids" ng-if="!vm.bids.length">No bids yet.</p>
                     </section>
                 </aside>
             </section>
@@ -243,13 +260,24 @@ $canonical = $baseUrl . '/item/' . urlencode($item['seo_slug']);
     <script>
         window.__APP_BOOTSTRAP__ = {
             user: <?php echo json_encode($currentUser); ?>,
-            item: <?php echo json_encode(['id_item' => $item['id_item'], 'seo_slug' => $item['seo_slug']]); ?>
+            item: <?php echo json_encode([
+                'id_item' => $item['id_item'],
+                'seo_slug' => $item['seo_slug'],
+                'id_user' => $item['id_user'],
+                'listing_type' => $item['listing_type'],
+                'current_highest_bid' => $item['current_highest_bid'],
+                'start_price' => $item['start_price'],
+                'bid_end_utc' => $item['bid_end_utc'],
+                'is_published' => $item['is_published'],
+                'item_status' => $item['item_status'],
+            ]); ?>
         };
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
     <script src="/frontend/app.js"></script>
     <script src="/frontend/services/api.service.js"></script>
     <script src="/frontend/services/auth.service.js"></script>
+    <script src="/frontend/services/saved.service.js"></script>
     <script src="/frontend/controllers/auth.controller.js"></script>
     <script src="/frontend/controllers/item.controller.js"></script>
 </body>

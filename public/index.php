@@ -23,6 +23,9 @@ $currentUser = SessionAuth::user();
             </div>
             <div class="auth-strip" ng-if="auth.user">
                 <span>Welcome, {{ auth.user.first_name }}</span>
+                <a href="/buyer-dashboard" class="link-button">Buyer Dashboard</a>
+                <a href="/seller-dashboard" class="link-button">Seller Dashboard</a>
+                <a href="/create-item" class="link-button secondary">Create Listing</a>
                 <button type="button" ng-click="auth.logout()">Logout</button>
             </div>
         </div>
@@ -55,6 +58,12 @@ $currentUser = SessionAuth::user();
                     <img ng-if="item.server_file_path" ng-src="{{ item.server_file_path }}" alt="{{ item.title }}">
                     <div class="placeholder" ng-if="!item.server_file_path">No image</div>
                     <span class="badge badge-type">{{ item.listing_type === 'bid' ? 'Bid' : (item.listing_type === 'fixed_price' ? 'Fixed price' : 'Bid & Buy') }}</span>
+                    <button type="button"
+                            class="save-pill"
+                            ng-class="{ 'save-pill--active': item.__saved }"
+                            ng-click="home.toggleSaved(item, $event)">
+                        {{ item.__saved ? 'Saved' : 'Save' }}
+                    </button>
                 </div>
                 <div class="item-body">
                     <div class="item-meta">
@@ -112,6 +121,7 @@ $currentUser = SessionAuth::user();
     <script src="/frontend/app.js"></script>
     <script src="/frontend/services/api.service.js"></script>
     <script src="/frontend/services/auth.service.js"></script>
+    <script src="/frontend/services/saved.service.js"></script>
     <script src="/frontend/controllers/auth.controller.js"></script>
     <script src="/frontend/controllers/home.controller.js"></script>
 </body>
