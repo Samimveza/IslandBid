@@ -2,7 +2,7 @@
 (function () {
     'use strict';
 
-    angular.module('islandBidApp').controller('SellerDashboardController', function SellerDashboardController(DashboardService) {
+    angular.module('islandBidApp').controller('SellerDashboardController', function SellerDashboardController(DashboardService, AuthService) {
         var vm = this;
         vm.status = 'all';
         vm.items = [];
@@ -18,7 +18,11 @@
             vm.load();
         };
 
-        vm.load();
+        AuthService.requireAuth().then(function () {
+            vm.load();
+        }).catch(function () {
+            window.location.href = '/login';
+        });
     });
 })();
 

@@ -31,6 +31,10 @@
             });
         };
 
+        AuthService.requireAuth().catch(function () {
+            window.location.href = '/login';
+        });
+
         CategoryService.getCategories().then(function (categories) {
             vm.categories = categories;
         });
