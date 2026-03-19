@@ -14,4 +14,6 @@ return [
     'DB_PASSWORD' => getenv('DB_PASSWORD') ?: 'postgres',
     'SESSION_NAME' => getenv('SESSION_NAME') ?: 'islandbid_session',
     'SESSION_LIFETIME' => getenv('SESSION_LIFETIME') ?: '7200',
+    'UPLOAD_PHYSICAL_BASE' => getenv('UPLOAD_PHYSICAL_BASE') ?: '/var/www/uploads',
+    'UPLOAD_SERVER_FOLDER' => getenv('UPLOAD_SERVER_FOLDER') ?: '/uploads',
 ];

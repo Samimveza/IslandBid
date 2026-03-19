@@ -75,14 +75,17 @@ $sql = "
         i.bid_end_utc,
         i.date_created_utc,
         c.category_name,
-        img.server_file_path,
+        img.full_server_path as server_file_path,
         img.physical_file_path
     from item i
     join category c on c.id_category = i.id_category
     left join lateral (
-        select d.server_file_path, d.physical_file_path
+        select
+            (rtrim(p.paramater_value, '/') || '/' || ltrim(d.server_file_path, '/')) as full_server_path,
+            d.physical_file_path
         from item_document idoc
         join document d on d.id_document = idoc.id_document
+        join parameter p on p.id_parameter = d.id_parameter_base_server_url
         where idoc.id_item = i.id_item
           and d.is_deactivated = false
         order by idoc.is_primary desc, idoc.display_order nulls last, d.date_created_utc desc

@@ -33,6 +33,31 @@ try {
         exit;
     }
 
+    if ($path === '/api/items/detail' && $method === 'GET') {
+        require __DIR__ . '/../api/items/detail.php';
+        exit;
+    }
+
+    if ($path === '/api/categories' && $method === 'GET') {
+        require __DIR__ . '/../api/categories/list.php';
+        exit;
+    }
+
+    if ($path === '/api/categories/fields' && $method === 'GET') {
+        require __DIR__ . '/../api/categories/fields.php';
+        exit;
+    }
+
+    if ($path === '/api/items' && $method === 'POST') {
+        require __DIR__ . '/../api/items/create.php';
+        exit;
+    }
+
+    if ($path === '/api/items/upload-image' && $method === 'POST') {
+        require __DIR__ . '/../api/items/upload-image.php';
+        exit;
+    }
+
     JsonResponse::error('Route not found.', 404);
 } catch (PDOException $e) {
     JsonResponse::error('Database error.', 500, ['detail' => $e->getMessage()]);

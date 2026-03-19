@@ -27,7 +27,7 @@ class Upload
         if (!in_array($mimeType, $allowedMimeTypes, true)) {
             throw new RuntimeException('Unsupported file type.');
         }
-
+      
         self::ensureDirectory($targetDirectory);
 
         $extension = strtolower(pathinfo((string) ($file['name'] ?? ''), PATHINFO_EXTENSION));
@@ -42,8 +42,9 @@ class Upload
 
         $storedName = Util::uuid() . '.' . $extension;
         $destination = rtrim($targetDirectory, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $storedName;
-
-        if (!move_uploaded_file($tmp, $destination)) {
+        $isUploaded = move_uploaded_file($tmp, $destination);
+   
+        if (!$isUploaded) {
             throw new RuntimeException('Unable to move uploaded file.');
         }
 

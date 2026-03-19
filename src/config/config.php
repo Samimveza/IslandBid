@@ -7,6 +7,8 @@ return [
         'env' => $env['APP_ENV'],
         'debug' => $env['APP_DEBUG'] === '1',
         'url' => $env['APP_URL'],
+        'uploads_physical' => $env['UPLOAD_PHYSICAL_BASE'],
+        'uploads_folder' => $env['UPLOAD_SERVER_FOLDER'],
     ],
     'db' => [
         'host' => $env['DB_HOST'],
