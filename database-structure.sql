@@ -318,3 +318,77 @@ insert into parameter (id_parameter, code, paramater_value, id_tenant)
 values
 ('PARAM_PHYSICAL_PATH', 'BASE_PHYSICAL_PATH', '/var/www/uploads/', 'TENANT_DEFAULT'),
 ('PARAM_SERVER_URL', 'BASE_SERVER_URL', 'https://yourdomain.com/uploads/', 'TENANT_DEFAULT');
+
+
+insert into category_field values
+('CF_MB_BRAND', 'CAT_MOBILE', 'brand', 'Brand', 'text', true, true, true, 1, now()),
+('CF_MB_MODEL', 'CAT_MOBILE', 'model', 'Model', 'text', true, true, true, 2, now()),
+('CF_MB_STORAGE', 'CAT_MOBILE', 'storage', 'Storage', 'text', true, true, true, 3, now()),
+('CF_MB_RAM', 'CAT_MOBILE', 'ram', 'RAM', 'text', false, true, true, 4, now()),
+('CF_MB_BATTERY', 'CAT_MOBILE', 'battery', 'Battery Health (%)', 'number', false, true, true, 5, now()),
+('CF_MB_CONDITION', 'CAT_MOBILE', 'condition', 'Condition', 'select', true, true, true, 6, now());
+
+insert into category_field values
+('CF_PC_BRAND', 'CAT_COMPUTER', 'brand', 'Brand', 'text', true, true, true, 1, now()),
+('CF_PC_MODEL', 'CAT_COMPUTER', 'model', 'Model', 'text', true, true, true, 2, now()),
+('CF_PC_CPU', 'CAT_COMPUTER', 'cpu', 'Processor', 'text', true, true, true, 3, now()),
+('CF_PC_RAM', 'CAT_COMPUTER', 'ram', 'RAM', 'text', true, true, true, 4, now()),
+('CF_PC_STORAGE', 'CAT_COMPUTER', 'storage', 'Storage', 'text', true, true, true, 5, now()),
+('CF_PC_CONDITION', 'CAT_COMPUTER', 'condition', 'Condition', 'select', true, true, true, 6, now());
+
+insert into category_field values
+('CF_FUR_TYPE', 'CAT_FURNITURE', 'type', 'Type', 'text', true, true, true, 1, now()),
+('CF_FUR_MATERIAL', 'CAT_FURNITURE', 'material', 'Material', 'text', false, true, true, 2, now()),
+('CF_FUR_CONDITION', 'CAT_FURNITURE', 'condition', 'Condition', 'select', true, true, true, 3, now());
+
+insert into category_field values
+('CF_APP_BRAND', 'CAT_APPLIANCE', 'brand', 'Brand', 'text', true, true, true, 1, now()),
+('CF_APP_MODEL', 'CAT_APPLIANCE', 'model', 'Model', 'text', true, true, true, 2, now()),
+('CF_APP_POWER', 'CAT_APPLIANCE', 'power_rating', 'Power Rating', 'text', false, true, true, 3, now()),
+('CF_APP_WARRANTY', 'CAT_APPLIANCE', 'warranty', 'Warranty Available', 'boolean', false, true, true, 4, now()),
+('CF_APP_CONDITION', 'CAT_APPLIANCE', 'condition', 'Condition', 'select', true, true, true, 5, now());
+
+insert into category_field values
+('CF_JEW_METAL', 'CAT_JEWELLERY', 'metal_type', 'Metal Type', 'text', true, true, true, 1, now()),
+('CF_JEW_GEM', 'CAT_JEWELLERY', 'gemstone', 'Gemstone', 'text', false, true, true, 2, now()),
+('CF_JEW_WEIGHT', 'CAT_JEWELLERY', 'weight', 'Weight', 'decimal', false, true, true, 3, now()),
+('CF_JEW_CERT', 'CAT_JEWELLERY', 'certification', 'Certification', 'boolean', false, true, true, 4, now()),
+('CF_JEW_CONDITION', 'CAT_JEWELLERY', 'condition', 'Condition', 'select', true, true, true, 5, now());
+
+insert into category_field values
+('CF_MC_MAKE', 'CAT_MOTORCYCLE', 'make', 'Make', 'text', true, true, true, 1, now()),
+('CF_MC_MODEL', 'CAT_MOTORCYCLE', 'model', 'Model', 'text', true, true, true, 2, now()),
+('CF_MC_YEAR', 'CAT_MOTORCYCLE', 'year', 'Year', 'number', true, true, true, 3, now()),
+('CF_MC_CC', 'CAT_MOTORCYCLE', 'engine_capacity', 'Engine Capacity (cc)', 'number', false, true, true, 4, now()),
+('CF_MC_MILEAGE', 'CAT_MOTORCYCLE', 'mileage', 'Mileage (km)', 'number', false, true, true, 5, now()),
+('CF_MC_CONDITION', 'CAT_MOTORCYCLE', 'condition', 'Condition', 'select', true, true, true, 6, now());
+
+insert into category_field_option values
+('OPT_MB_COND_NEW', 'CF_MB_CONDITION', 'NEW', 'New', 1, true),
+('OPT_MB_COND_USED', 'CF_MB_CONDITION', 'USED', 'Used', 2, true),
+('OPT_MB_COND_REFURB', 'CF_MB_CONDITION', 'REFURB', 'Refurbished', 3, true);
+
+insert into category_field_option values
+('OPT_PC_COND_NEW', 'CF_PC_CONDITION', 'NEW', 'New', 1, true),
+('OPT_PC_COND_USED', 'CF_PC_CONDITION', 'USED', 'Used', 2, true),
+('OPT_PC_COND_REFURB', 'CF_PC_CONDITION', 'REFURB', 'Refurbished', 3, true);
+
+insert into category_field_option values
+('OPT_FUR_COND_NEW', 'CF_FUR_CONDITION', 'NEW', 'New', 1, true),
+('OPT_FUR_COND_USED', 'CF_FUR_CONDITION', 'USED', 'Used', 2, true),
+('OPT_FUR_COND_REFURB', 'CF_FUR_CONDITION', 'REFURB', 'Refurbished', 3, true);
+
+insert into category_field_option values
+('OPT_APP_COND_NEW', 'CF_APP_CONDITION', 'NEW', 'New', 1, true),
+('OPT_APP_COND_USED', 'CF_APP_CONDITION', 'USED', 'Used', 2, true),
+('OPT_APP_COND_REFURB', 'CF_APP_CONDITION', 'REFURB', 'Refurbished', 3, true);
+
+insert into category_field_option values
+('OPT_JEW_COND_NEW', 'CF_JEW_CONDITION', 'NEW', 'New', 1, true),
+('OPT_JEW_COND_USED', 'CF_JEW_CONDITION', 'USED', 'Used', 2, true),
+('OPT_JEW_COND_REFURB', 'CF_JEW_CONDITION', 'REFURB', 'Refurbished', 3, true);
+
+insert into category_field_option values
+('OPT_MC_COND_NEW', 'CF_MC_CONDITION', 'NEW', 'New', 1, true),
+('OPT_MC_COND_USED', 'CF_MC_CONDITION', 'USED', 'Used', 2, true),
+('OPT_MC_COND_REFURB', 'CF_MC_CONDITION', 'REFURB', 'Refurbished', 3, true);
